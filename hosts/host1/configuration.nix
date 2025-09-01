@@ -4,6 +4,7 @@
 
 { ... }: {
   networking.hostName = "host1"; # Change to your hostname
+  system.stateVersion = "25.11";
 
   ### Host-specific configuration ###
 

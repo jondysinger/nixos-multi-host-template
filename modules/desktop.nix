@@ -1,8 +1,10 @@
-/* File:        modules/desktop.nix
-   Description: This shared module declares settings which are related to the desktop environment and GUI apps.
+/*
+  File:        modules/desktop.nix
+  Description: This shared module declares settings which are related to the desktop environment and GUI apps.
 */
 
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   # Desktop environment
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
@@ -16,9 +18,19 @@
   };
 
   # GUI applications to install
-  environment.systemPackages = with pkgs; [ gnome-tweaks brave ];
+  environment.systemPackages = with pkgs; [
+    gnome-tweaks
+    brave
+  ];
 
   ### Other Examples ###
+
+  # Use Stylix to share a common theme on every host (wallpaper, color palette, and fonts).
+  #
+  #    stylix = {
+  #      enable = true;
+  #      image = ./wallpaper.png;
+  #    };
 
   # Install a custom font package
   #

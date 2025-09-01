@@ -1,20 +1,27 @@
-/* File:        flake.nix
-   Description: Primary flake for the nixos configuration. Defines all other modules to import.
-   Usage:       Execute as `sudo nixos-rebuild switch --flake /etc/nixos#$HOSTNAME`
+/*
+  File:        flake.nix
+  Description: Primary flake for the nixos configuration. Defines all other modules to import.
+  Usage:       Execute as `sudo nixos-rebuild switch --flake /etc/nixos#$HOSTNAME`
 */
 
 {
   description = "NixOS Multi-Host Template";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }:
     let
       system = "x86_64-linux";
       username = "<your-username>";
@@ -27,7 +34,8 @@
       # modules declaring the same setting) You can resolve that conflict by using lib.mkDefault in shared modules to
       # specify a setting as a default value or lib.mkForce in host-specific modules to specify that setting overrides
       # all other values.
-      mkNixosConfiguration = hostName:
+      mkNixosConfiguration =
+        hostName:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
@@ -51,12 +59,15 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.users.${username} = import "${self}/home/home.nix";
+              home-manager.users.${username} = {
+                imports = [
+                  "${self}/modules/home.nix"
+                  "${self}/hosts/${hostName}/home.nix"
+                ];
+              };
               home-manager.backupFileExtension = "backup";
               home-manager.extraSpecialArgs = {
                 username = username;
-                # Host specific home manager overrides
-                hostConfigPath = "${self}/hosts/${hostName}/home.nix";
               };
             }
 
@@ -72,9 +83,12 @@
       # only the configuration for the specified host is actually built and evaluated. The other hosts remain
       # unevaluated until explicitly requested. This gives us the ability to manage multiple hosts from a single flake.
       hostDirs = builtins.readDir ./hosts;
-      nixosConfigurationsFromHosts = nixpkgs.lib.mapAttrs (hostName: type:
-        if type == "directory" then mkNixosConfiguration hostName else null)
-        hostDirs;
+      nixosConfigurationsFromHosts = nixpkgs.lib.mapAttrs (
+        hostName: type: if type == "directory" then mkNixosConfiguration hostName else null
+      ) hostDirs;
 
-    in { nixosConfigurations = nixosConfigurationsFromHosts; };
+    in
+    {
+      nixosConfigurations = nixosConfigurationsFromHosts;
+    };
 }

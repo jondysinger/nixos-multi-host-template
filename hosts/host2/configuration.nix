@@ -1,21 +1,34 @@
-/* File:        hosts/host2/configuration.nix
-   Description: Host-specific configuration for host2
+/*
+  File:        hosts/host2/configuration.nix
+  Description: Host-specific configuration for host2
 */
 
-{ ... }: {
+{ ... }:
+{
   networking.hostName = "host2"; # Change to your hostname
+  system.stateVersion = "25.11";
 
   ### Host-specific configuration ###
 
-  # Examples:
+  # Example: Gaming desktop / Steam machine
   #
-  #    hardware.bluetooth.enable = true; # Enable Bluetooth
-  #    services.blueman.enable = true;   # Enable Blueman
-
-  # Intel graphics
+  #    programs.steam = {
+  #      enable = true;
+  #      remotePlay.openFirewall = true;
+  #      dedicatedServer.openFirewall = true;
+  #    };
+  #
+  #    services.sunshine = {
+  #      enable = true;
+  #      autoStart = false;
+  #      capSysAdmin = true;
+  #      openFirewall = true;
+  #    };
   #
   #    hardware.graphics = {
   #      enable = true;
-  #      extraPackages = with pkgs; [ intel-media-driver ];
+  #      enable32Bit = true;
   #    };
+  #
+  #    services.xserver.videoDrivers = [ "amdgpu" ];
 }

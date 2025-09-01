@@ -1,11 +1,16 @@
-/* File:        modules/common.nix
-   Description: This shared module declares common settings which are not specific to the user or desktop environment
-                (GUI apps).
+/*
+  File:        modules/common.nix
+  Description: This shared module declares common settings which are not specific to the user or desktop environment
+               (GUI apps).
 */
 
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   # Both of these experimental features are required for flakes to work.
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Optimizations
   nix.settings.auto-optimise-store = true; # Deduplicates files the nix store
@@ -19,20 +24,19 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Packages to install that are either CLI tools or library dependencies
-  environment.systemPackages = with pkgs;
-    [
-      # Network tools
-      #    wget
-      #    curl
+  environment.systemPackages = with pkgs; [
+    # Network tools
+    #    wget
+    #    curl
 
-      # Archive tools
-      #    unzip
+    # Archive tools
+    #    unzip
 
-      # Development tools
-      #    git
-      #    gcc
-      #    gnumake
-    ];
+    # Development tools
+    #    git
+    #    gcc
+    #    gnumake
+  ];
 
   # Audio
   services.pulseaudio.enable = false;
@@ -70,6 +74,4 @@
   # Enabling other services
   #
   #    services.openssh.enable = true;
-
-  system.stateVersion = "25.05";
 }

@@ -1,33 +1,33 @@
-/* File:        home/common.nix
-   Description: This is where your home-manager settings go which are common to all hosts.
+/*
+  File:        modules/home.nix
+  Description: This shared module declares home-manager settings which are common to all hosts.
 */
 
-{ pkgs, ... }: {
-  home.stateVersion = "25.05";
+{ pkgs, ... }:
+{
   fonts.fontconfig.enable = true;
   programs.home-manager.enable = true;
 
   ### Packages only available to the defined user ###
-  home.packages = with pkgs;
-    [
-      # Neovim and dependencies
-      #   neovim
-      #   ripgrep
-      #   tree-sitter
+  home.packages = with pkgs; [
+    # Neovim and dependencies
+    #   neovim
+    #   ripgrep
+    #   tree-sitter
 
-      # LSP servers
-      #   lua-language-server
-      #   nil
+    # LSP servers
+    #   lua-language-server
+    #   nil
 
-      # Formatters and linters
-      #   stylua
-      #   nixfmt
+    # Formatters and linters
+    #   stylua
+    #   nixfmt
 
-      # Other useful tools
-      #   delta
-      #   lazygit
-      #   fzf
-    ];
+    # Other useful tools
+    #   delta
+    #   lazygit
+    #   fzf
+  ];
 
   ### Other Examples ###
 

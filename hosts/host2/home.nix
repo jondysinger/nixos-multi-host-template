@@ -4,5 +4,7 @@
 
 { ... }:
 {
+  home.stateVersion = "25.11";
+
   ### Home-manager configuration specific to host2 ###
 }
